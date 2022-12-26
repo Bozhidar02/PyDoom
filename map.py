@@ -2,13 +2,13 @@ import pygame
 
 game_map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, 1],
+    [1, False, False, False, False, False, False, False, False, False, False, False, False, False, False, 1],
     [1, False, False, 1, 1, 1, 1, False, False, False, False, False, False, False, False, 1],
     [1, False, False, False, False, False, 1, False, False, 1, 1, 1, False, False, False, 1],
     [1, False, False, False, False, False, 1, False, False, False, False, False, False, False, False, 1],
     [1, False, False, 1, 1, 1, 1, False, False, False, False, False, False, False, False, 1],
-    [False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, 1],
-    [False, False, False, False, 1, False, False, False, False, False, 1, False, False, False, False, 1],
+    [1, False, False, False, False, False, False, False, False, False, False, False, False, False, False, 1],
+    [1, False, False, False, 1, False, False, False, False, False, 1, False, False, False, False, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
