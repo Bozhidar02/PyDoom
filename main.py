@@ -4,10 +4,12 @@ from settings import *
 from map import *
 from player import *
 from ray_casting import *
+from object_renderer import *
 
 
 class Game:
     def __init__(self):
+        self.obj_render = None
         self.ray_cast = None
         self.player = None
         self.map = None
@@ -20,8 +22,9 @@ class Game:
     def new_game(self):
         self.map = Map(self)
         self.player = Player(self)
+        self.obj_render = ObjectRenderer(self)
         self.ray_cast = RayCasting(self)
-
+        
     def update_screen(self):
         self.player.update()
         self.ray_cast.update()
@@ -31,6 +34,7 @@ class Game:
 
     def draw(self):
         self.screen.fill('black')
+        self.obj_render.draw()
         #self.map.test_draw()
         #self.player.test_draw()
 

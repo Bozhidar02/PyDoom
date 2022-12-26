@@ -40,9 +40,10 @@ class Player:
         return (x, y) not in self.game.map.world_map
 
     def collision_check(self, dx, dy):
-        if self.wall_coords(int(self.x + dx), int(self.y)):
+        scale = PLATER_SIZE / self.game.delta
+        if self.wall_coords(int(self.x + dx * scale), int(self.y)):
             self.x += dx
-        if self.wall_coords(int(self.x), int(self.y + dy)):
+        if self.wall_coords(int(self.x), int(self.y + dy * scale)):
             self.y += dy
 
     def test_draw(self):
