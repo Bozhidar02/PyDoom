@@ -11,7 +11,7 @@ class RayCasting:
         ox, oy = self.game.player.position
         x_map, y_map = self.game.player.map_position
         ray_angle = self.game.player.angle - HALF_FOV + 0.0001
-        for _ in range(NUM_RAYS):
+        for ray in range(NUM_RAYS):
             sina = math.sin(ray_angle)
             cosa = math.cos(ray_angle)
             # horizontal
@@ -48,10 +48,18 @@ class RayCasting:
                 depth = depth_vert
             else:
                 depth = depth_hor
+            # remove fishbow
+            depth *= math.cos(self.game.player.angle - ray_angle)
+            # projection
+            colour = [225 / (1 + depth ** 5 * 0.00002)] * 3
+            projection_height = SCREEN_DIST / (depth + 0.0001)
+            # walls
+            pygame.draw.rect(self.game.screen, colour, (ray * SCALE, HALF_HEIGHT - projection_height // 2,
+                                                         SCALE, projection_height))
 
             # test stuff
-            pygame.draw.line(self.game.screen, 'yellow', (100 * ox, 100 * oy),
-                             (100 * ox + 100 * depth * cosa, 100 * oy + 100 * depth * sina), 2)
+            # pygame.draw.line(self.game.screen, 'yellow', (100 * ox, 100 * oy),
+            #                 (100 * ox + 100 * depth * cosa, 100 * oy + 100 * depth * sina), 2)
             ray_angle += DELTA_ANGLE
 
     def update(self):
