@@ -22,7 +22,7 @@ class ObjectRenderer:
         pygame.draw.rect(self.screen, FLOOR_COLOUR, (0, HALF_HEIGHT, WIDTH, HEIGHT))
 
     def render_game_objects(self):
-        obj_list = self.game.ray_cast.objects_to_render
+        obj_list = sorted(self.game.ray_cast.objects_to_render, key = lambda y: y[0], reverse=True)
         for depth, image, pos in obj_list:
             self.screen.blit(image, pos)
 
