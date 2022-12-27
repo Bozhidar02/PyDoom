@@ -53,7 +53,7 @@ class SpriteObject:
 
 class AnimatedSprites(SpriteObject):
     def __init__(self, game, path='resources/sprites/animated/blue_fire/fb0.png', pos=(9, 4.2), scale=0.8,
-                 shift=0.15, animation_time=20):
+                 shift=0.15, animation_time=200):
         super().__init__(game, path, pos, scale, shift)
         self.animation_time = animation_time
         self.path = path.rsplit('/', 1)[0]
