@@ -14,6 +14,7 @@ class Game:
         self.player = None
         self.map = None
         pygame.init()
+        pygame.mouse.set_visible(False)
         self.screen = pygame.display.set_mode(Res)
         self.clock = pygame.time.Clock()
         self.delta = 1
@@ -33,7 +34,6 @@ class Game:
         pygame.display.set_caption(f'{self.clock.get_fps():.1f}')
 
     def draw(self):
-        self.screen.fill('black')
         self.obj_render.draw()
         #self.map.test_draw()
         #self.player.test_draw()

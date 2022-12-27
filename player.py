@@ -5,6 +5,7 @@ import math
 
 class Player:
     def __init__(self, game):
+        self.rel = None
         self.game = game
         self.x, self.y = PLAYER_POSITION
         self.angle = PLAYER_ANGLE
@@ -46,16 +47,17 @@ class Player:
         if self.wall_coords(int(self.x), int(self.y + dy * scale)):
             self.y += dy
 
-    def test_draw(self):
-        '''
-        pygame.draw.line(self.game.screen, 'yellow', (self.x * 100, self.y * 100),
-                         (self.x * 100 + WIDTH * math.cos(self.angle),
-                          self.y * 100 + WIDTH * math.sin(self.angle)), 2)
-        '''
-        pygame.draw.circle(self.game.screen, 'green', (self.x * 100, self.y * 100), 15)
+    def mouse_look(self):
+        mx, my = pygame.mouse.get_pos()
+        if mx < MOUSE_BORDER_LEFT or mx > MOUSE_BORDER_RIGHT:
+            pygame.mouse.set_pos([HALF_WIDTH, HALF_HEIGHT])
+        self.rel = pygame.mouse.get_rel()[0]
+        self.rel = max(-MOUSE_MAX_REL, min(MOUSE_MAX_REL, self.rel))
+        self.angle += self.rel * MOUSE_SENSITIVITY * self.game.delta
 
     def update(self):
         self.movement()
+        self.mouse_look()
 
     @property
     def position(self):
