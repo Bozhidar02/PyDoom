@@ -70,6 +70,8 @@ class NPC(AnimatedSprites):
     def attack(self):
         if self.animation_trigger:
             self.game.sound.npc_attack.play()
+            if random() < self.accuracy:
+                self.game.player.take_damage(self.damage)
 
     def animate_death(self):
         if not self.alive:

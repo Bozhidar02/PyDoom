@@ -10,6 +10,21 @@ class Player:
         self.x, self.y = PLAYER_POSITION
         self.angle = PLAYER_ANGLE
         self.shot = False
+        self.health = PLAYER_MAX_HEALTH
+        self.rel = 0
+
+    def is_dead(self):
+        if self.health <= 0:
+            self.game.obj_render.game_over()
+            pygame.display.flip()
+            pygame.time.delay(3500)
+            self.game.new_game()
+
+    def take_damage(self, damage):
+        self.health -= damage
+        self.game.obj_render.player_damage()
+        self.game.sound.player_pain.play()
+        self.is_dead()
 
     def fire(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
