@@ -17,6 +17,11 @@ class Player:
                 self.game.sound.shotgun.play()
                 self.shot = True
                 self.game.weapon.reloading = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and not self.shot and not self.game.weapon.reloading:
+                self.game.sound.shotgun.play()
+                self.shot = True
+                self.game.weapon.reloading = True
 
     def movement(self):
         sina = math.sin(self.angle)
@@ -49,7 +54,7 @@ class Player:
         return (x, y) not in self.game.map.world_map
 
     def collision_check(self, dx, dy):
-        scale = PLATER_SIZE / self.game.delta
+        scale = PLAYER_SIZE / self.game.delta
         if self.wall_coords(int(self.x + dx * scale), int(self.y)):
             self.x += dx
         if self.wall_coords(int(self.x), int(self.y + dy * scale)):

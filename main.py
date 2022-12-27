@@ -8,10 +8,12 @@ from object_renderer import *
 from object_manager import *
 from weapon import *
 from Sound import *
+from pathfinding import *
 
 
 class Game:
     def __init__(self):
+        self.pathfinder = None
         self.sound = None
         self.weapon = None
         self.object_manager = None
@@ -26,6 +28,9 @@ class Game:
         self.screen = pygame.display.set_mode(Res)
         self.clock = pygame.time.Clock()
         self.delta = 1
+        self.global_trigger = False
+        self.global_event = pygame.USEREVENT + 0
+        pygame.time.set_timer(self.global_event, 40)
         self.new_game()
 
     def new_game(self):
@@ -36,6 +41,7 @@ class Game:
         self.object_manager = ObjectManager(self)
         self.weapon = Weapon(self)
         self.sound = Sound(self)
+        self.pathfinder = Pathfinder(self)
         
     def update_screen(self):
         self.player.update()
