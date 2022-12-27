@@ -1,9 +1,11 @@
 import pygame
 from settings import *
+import os
+from collections import deque
 
 
 class SpriteObject:
-    def __init__(self, game, path='resources/sprites/static/candlebra.png', pos=(11, 4.5), scale=0.7, shift=0.27):
+    def __init__(self, game, path='resources/sprites/static/candlebra.png', pos=(11.7, 4.2), scale=0.7, shift=0.27):
         self.sprite_half_width = 0
         self.norm_dist = 1
         self.dist = 1
@@ -49,5 +51,37 @@ class SpriteObject:
         self.game.ray_cast.objects_to_render.append((self.norm_dist, image, pos))
 
 
+class AnimatedSprites(SpriteObject):
+    def __init__(self, game, path='resources/sprites/animated/blue_fire/fb0.png', pos=(9, 4.2), scale=0.8,
+                 shift=0.15, animation_time=20):
+        super().__init__(game, path, pos, scale, shift)
+        self.animation_time = animation_time
+        self.path = path.rsplit('/', 1)[0]
+        self.images = self.get_images(self.path)
+        self.animation_trigger = False
+        self.animation_time_count = pygame.time.get_ticks()
 
+    def update(self):
+        super().update()
+        self.check_animation_time()
+        self.animate(self.images)
 
+    def animate(self, images):
+        if self.animation_trigger:
+            images.rotate(-1)
+            self.image = images[0]
+
+    def check_animation_time(self):
+        self.animation_trigger = False
+        current_time = pygame.time.get_ticks()
+        if current_time - self.animation_time_count > self.animation_time:
+            self.animation_time_count = current_time
+            self.animation_trigger = True
+
+    def get_images(self, path):
+        images = deque()
+        for file_name in os.listdir(path):
+            if os.path.isfile(os.path.join(path, file_name)):
+                image = pygame.image.load(path + '/' + file_name).convert_alpha()
+                images.append(image)
+        return images

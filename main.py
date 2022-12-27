@@ -10,6 +10,7 @@ from sprites import *
 
 class Game:
     def __init__(self):
+        self.animated_sprite = None
         self.static_sprite = None
         self.obj_render = None
         self.ray_cast = None
@@ -28,11 +29,13 @@ class Game:
         self.obj_render = ObjectRenderer(self)
         self.ray_cast = RayCasting(self)
         self.static_sprite = SpriteObject(self)
+        self.animated_sprite = AnimatedSprites(self)
         
     def update_screen(self):
         self.player.update()
         self.ray_cast.update()
         self.static_sprite.update()
+        self.animated_sprite.update()
         pygame.display.flip()
         self.delta = self.clock.tick(FPS)
         pygame.display.set_caption(f'{self.clock.get_fps():.1f}')
