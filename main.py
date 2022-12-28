@@ -9,10 +9,12 @@ from object_manager import *
 from weapon import *
 from Sound import *
 from pathfinding import *
+from weapon_wheel import *
 
 
 class Game:
     def __init__(self):
+        self.weapons = None
         self.pathfinder = None
         self.sound = None
         self.weapon = None
@@ -39,24 +41,25 @@ class Game:
         self.obj_render = ObjectRenderer(self)
         self.ray_cast = RayCasting(self)
         self.object_manager = ObjectManager(self)
-        self.weapon = Weapon(self)
+        # self.weapon = Weapon(self)
+        self.weapons = WeaponWheel(self)
         self.sound = Sound(self)
         self.pathfinder = Pathfinder(self)
+
+        self.sound.theme.play()
         
     def update_screen(self):
         self.player.update()
         self.ray_cast.update()
         self.object_manager.update()
-        self.weapon.update()
+        self.weapons.equipped_weapon.update()
         pygame.display.flip()
         self.delta = self.clock.tick(FPS)
         pygame.display.set_caption(f'{self.clock.get_fps():.1f}')
 
     def draw(self):
         self.obj_render.draw()
-        self.weapon.draw()
-        #self.map.test_draw()
-        #self.player.test_draw()
+        self.weapons.equipped_weapon.draw()
 
     def check_events(self):
         for event in pygame.event.get():
@@ -64,6 +67,8 @@ class Game:
                 pygame.quit()
                 sys.exit()
             self.player.fire(event)
+            self.weapons.change_weapon(event)
+
 
     def run(self):
         while True:

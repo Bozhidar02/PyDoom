@@ -38,7 +38,7 @@ class NPC(AnimatedSprites):
                 self.animate_pain()
             elif self.ray_cast_val:
                 self.player_search_trigger = True
-                if self.dist < self.attack_dist:
+                if self.dist <= self.attack_dist:
                     self.animate(self.attack_images)
                     self.attack()
                 else:
@@ -54,12 +54,12 @@ class NPC(AnimatedSprites):
             self.animate_death()
 
     def is_hit(self):
-        if self.ray_cast_val and self.game.player.shot:
+        if self.ray_cast_val and self.game.player.shot and self.dist <= self.game.weapons.equipped_weapon.range:
             if HALF_WIDTH - self.sprite_half_width < self.screen_x < HALF_WIDTH + self.sprite_half_width:
                 self.game.sound.npc_pain.play()
                 self.game.player.shot = False
                 self.pain = True
-                self.health -= self.game.weapon.damage
+                self.health -= self.game.weapons.equipped_weapon.damage
                 self.check_status()
 
     def check_status(self):
@@ -161,3 +161,20 @@ class NPC(AnimatedSprites):
             return True
         else:
             return False
+
+
+class DemonSoldier(NPC):
+    def __init__(self, game, path='resources/sprites/npcs/soldier/0.png', pos=(11, 1.5), scale=0.6, shift=0.38,
+                 animation_time=180):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+
+
+class CacoDemon(NPC):
+    def __init__(self, game, path='resources/sprites/npcs/Caco/0.png', pos=(6.5, 10), scale=0.7, shift=0.27,
+                 animation_time=200):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+        self.attack_dist = 1.5
+        self.health = 150
+        self.damage = 20
+        self.speed = 0.05
+        self.accuracy = 1

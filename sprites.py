@@ -52,7 +52,7 @@ class SpriteObject:
 
 
 class AnimatedSprites(SpriteObject):
-    def __init__(self, game, path='resources/sprites/animated/blue_fire/fb0.png', pos=(5, 4), scale=0.8,
+    def __init__(self, game, path='resources/sprites/animated/blue_fire/fb0.png', pos=(5, 3.5), scale=0.8,
                  shift=0.15, animation_time=200):
         super().__init__(game, path, pos, scale, shift)
         self.animation_time = animation_time

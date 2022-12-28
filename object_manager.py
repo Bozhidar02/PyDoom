@@ -16,10 +16,11 @@ class ObjectManager:
         self.add_sprite(SpriteObject(game))
         self.add_sprite(AnimatedSprites(game))
         self.add_sprite(AnimatedSprites(game, pos=(1.5, 1.5)))
-        self.add_sprite(AnimatedSprites(game, pos=(14.5, 1.5)))
+        self.add_sprite(AnimatedSprites(game, pos=(14.5, 2.5)))
         # npcs
-        self.add_npc(NPC(game))
-        self.add_npc(NPC(game, pos=(11.5, 4.5)))
+        self.add_npc(DemonSoldier(game))
+        self.add_npc(DemonSoldier(game, pos=(11.5, 4.5)))
+        self.add_npc(CacoDemon(game))
 
     def update(self):
         self.npc_positions = {npc.map_position for npc in self.npcs if npc.alive}

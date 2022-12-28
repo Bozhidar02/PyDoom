@@ -28,15 +28,15 @@ class Player:
 
     def fire(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1 and not self.shot and not self.game.weapon.reloading:
+            if event.button == 1 and not self.shot and not self.game.weapons.equipped_weapon.reloading:
                 self.game.sound.shotgun.play()
                 self.shot = True
-                self.game.weapon.reloading = True
+                self.game.weapons.equipped_weapon.reloading = True
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and not self.shot and not self.game.weapon.reloading:
+            if event.key == pygame.K_SPACE and not self.shot and not self.game.weapons.equipped_weapon.reloading:
                 self.game.sound.shotgun.play()
                 self.shot = True
-                self.game.weapon.reloading = True
+                self.game.weapons.equipped_weapon.reloading = True
 
     def movement(self):
         sina = math.sin(self.angle)
