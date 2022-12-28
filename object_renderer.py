@@ -11,6 +11,7 @@ class ObjectRenderer:
         self.sky_offset = 0
         self.damage_screen = self.get_texture('resources/textures/damage_screen.png', Res)
         self.game_over_screen = self.get_texture('resources/textures/game_over_screen.png', Res)
+        self.victory_screen = self.get_texture('resources/textures/victory.png', Res)
 
     def draw(self):
         self.draw_skybox()
@@ -18,6 +19,9 @@ class ObjectRenderer:
 
     def game_over(self):
         self.screen.blit(self.game_over_screen, (0, 0))
+
+    def victory(self):
+        self.screen.blit(self.victory_screen, (0, 0))
 
     def draw_skybox(self):
         self.sky_offset = (self.sky_offset + 4.5 * self.game.player.rel) % WIDTH

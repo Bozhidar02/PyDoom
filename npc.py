@@ -1,3 +1,5 @@
+import pygame.time
+
 from sprites import *
 from random import randint, random, choice
 
@@ -66,6 +68,8 @@ class NPC(AnimatedSprites):
         if self.health <= 0:
             self.alive = False
             self.game.sound.npc_death.play()
+            self.game.object_manager.npc_num -= 1
+            # self.game.end_game()
 
     def attack(self):
         if self.animation_trigger:

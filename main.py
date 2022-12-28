@@ -69,7 +69,6 @@ class Game:
             self.player.fire(event)
             self.weapons.change_weapon(event)
 
-
     def run(self):
         while True:
             self.check_events()

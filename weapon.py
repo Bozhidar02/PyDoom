@@ -38,9 +38,11 @@ class Shotgun(Weapon):
     def __init__(self, game, path='resources/sprites/weapons/shotgun/shotgun0.png', scale=0.4,
                  animation_time=90, damage=100, w_range=10):
         super().__init__(game, path, scale, animation_time, damage, w_range)
+        self.ammo = MAX_SHOTGUN_MUNITION
 
 
 class Chainsaw(Weapon):
     def __init__(self, game, path='resources/sprites/weapons/chainsaw/0.png', scale=4.5,
                  animation_time=70, damage=50, w_range=2):
         super().__init__(game, path, scale, animation_time, damage, w_range)
+        self.ammo = -1

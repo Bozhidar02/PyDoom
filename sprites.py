@@ -51,6 +51,39 @@ class SpriteObject:
         self.game.ray_cast.objects_to_render.append((self.norm_dist, image, pos))
 
 
+class MedKit(SpriteObject):
+    def __init__(self, game, path='resources/sprites/static/medkit.png', pos=(1.5, 2.5), scale=0.2, shift=2.5):
+        super().__init__(game, path, pos, scale, shift)
+
+    def pick_up(self):
+        if int(self.x) == int(self.game.player.x) and int(self.y) == int(self.game.player.y):
+            if self.game.player.health < PLAYER_MAX_HEALTH:
+                self.game.player.health += 50
+                diff = PLAYER_MAX_HEALTH - self.game.player.health
+                if diff > 0:
+                    self.game.player.health -= diff
+
+    def update(self):
+        super().update()
+        self.pick_up()
+
+
+class Ammo(SpriteObject):
+    def __init__(self, game, path='resources/sprites/static/ammo.png', pos=(2.5, 3.5), scale=0.2, shift=2.5):
+        super().__init__(game, path, pos, scale, shift)
+
+    def pick_up(self):
+        if int(self.x) == int(self.game.player.x) and int(self.y) == int(self.game.player.y):
+            if MAX_SHOTGUN_MUNITION > self.game.weapons.weapons[0].ammo >= 0:
+                self.game.weapons.weapons[0].ammo += 5
+                diff = MAX_SHOTGUN_MUNITION - self.game.weapons.weapons[0].ammo
+                if diff > 0:
+                    self.game.weapons.weapons[0].ammo -= diff
+
+    def update(self):
+        super().update()
+        self.pick_up()
+
 class AnimatedSprites(SpriteObject):
     def __init__(self, game, path='resources/sprites/animated/blue_fire/fb0.png', pos=(5, 3.5), scale=0.8,
                  shift=0.15, animation_time=200):
