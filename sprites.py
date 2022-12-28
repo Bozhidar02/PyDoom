@@ -86,6 +86,7 @@ class Ammo(SpriteObject):
         super().update()
         self.pick_up()
 
+
 class AnimatedSprites(SpriteObject):
     def __init__(self, game, path='resources/sprites/animated/blue_fire/fb0.png', pos=(5, 3.5), scale=0.8,
                  shift=0.15, animation_time=200):
