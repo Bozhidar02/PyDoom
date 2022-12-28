@@ -12,10 +12,21 @@ class ObjectRenderer:
         self.damage_screen = self.get_texture('resources/textures/damage_screen.png', Res)
         self.game_over_screen = self.get_texture('resources/textures/game_over_screen.png', Res)
         self.victory_screen = self.get_texture('resources/textures/victory.png', Res)
+        self.digit_size = 90
+        self.digit_images = [self.get_texture(f'resources/textures/nums/{i}.png', [self.digit_size] * 2)
+                             for i in range(11)]
+        self.digits = dict(zip(map(str, range(11)), self.digit_images))
 
     def draw(self):
         self.draw_skybox()
         self.render_game_objects()
+        self.draw_player_health()
+
+    def draw_player_health(self):
+        health = str(self.game.player.health)
+        for i, char in enumerate(health):
+            self.screen.blit(self.digits[char], (i * self.digit_size, 0))
+        self.screen.blit(self.digits['10'], ((i + 1) * self.digit_size, 0))
 
     def game_over(self):
         self.screen.blit(self.game_over_screen, (0, 0))

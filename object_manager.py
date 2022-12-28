@@ -23,6 +23,7 @@ class ObjectManager:
         self.add_npc(DemonSoldier(game))
         self.add_npc(DemonSoldier(game, pos=(11.5, 4.5)))
         self.add_npc(CacoDemon(game))
+        self.add_npc(CacoDemon(game, pos=(14.5, 10)))
         self.npc_num = len(self.npcs)
 
     def update(self):

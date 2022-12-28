@@ -60,8 +60,9 @@ class MedKit(SpriteObject):
             if self.game.player.health < PLAYER_MAX_HEALTH:
                 self.game.player.health += 50
                 diff = PLAYER_MAX_HEALTH - self.game.player.health
-                if diff > 0:
-                    self.game.player.health -= diff
+                if diff < 0:
+                    self.game.player.health += diff
+                self.game.object_manager.sprites.remove(self)
 
     def update(self):
         super().update()
@@ -77,8 +78,9 @@ class Ammo(SpriteObject):
             if MAX_SHOTGUN_MUNITION > self.game.weapons.weapons[0].ammo >= 0:
                 self.game.weapons.weapons[0].ammo += 5
                 diff = MAX_SHOTGUN_MUNITION - self.game.weapons.weapons[0].ammo
-                if diff > 0:
-                    self.game.weapons.weapons[0].ammo -= diff
+                if diff < 0:
+                    self.game.weapons.weapons[0].ammo += diff
+                self.game.object_manager.sprites.remove(self)
 
     def update(self):
         super().update()
