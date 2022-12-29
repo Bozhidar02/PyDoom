@@ -16,6 +16,7 @@ class Weapon(AnimatedSprites):
         self.range = w_range
 
     def animate_shot(self):
+        # self.game.sound.shotgun.play()
         if self.reloading:
             self.game.player.shot = False
             if self.animation_trigger:

@@ -36,6 +36,7 @@ class Game:
         self.new_game()
 
     def new_game(self):
+        pygame.mixer.pause()
         self.map = Map(self)
         self.player = Player(self)
         self.obj_render = ObjectRenderer(self)
