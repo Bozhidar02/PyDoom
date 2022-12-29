@@ -12,4 +12,5 @@ class Sound:
         self.player_pain = pygame.mixer.Sound(self.path + 'sound_player_pain.wav')
         self.npc_death = pygame.mixer.Sound(self.path + 'sound_npc_death.wav')
         self.npc_attack = pygame.mixer.Sound(self.path + 'sound_npc_death.wav')
+        # self.ammo = pygame.mixer.Sound(self.path + 'sound_ammo.mp3')
         self.theme = pygame.mixer.Sound(self.path + 'theme.mp3')

@@ -76,6 +76,8 @@ class Ammo(SpriteObject):
     def pick_up(self):
         if int(self.x) == int(self.game.player.x) and int(self.y) == int(self.game.player.y):
             if MAX_SHOTGUN_MUNITION > self.game.weapons.weapons[0].ammo >= 0:
+                pygame.mixer.music.load("resources/sounds/sound_ammo.mp3")
+                pygame.mixer.music.play()
                 self.game.weapons.weapons[0].ammo += 5
                 diff = MAX_SHOTGUN_MUNITION - self.game.weapons.weapons[0].ammo
                 if diff < 0:
