@@ -2,7 +2,6 @@ import unittest
 from main import *
 import pygame
 from unittest.mock import Mock
-import weapon
 
 
 class Test(unittest.TestCase):
@@ -82,10 +81,11 @@ class TestWeapon(unittest.TestCase):
         self.weapon.animation_trigger = True
         self.weapon.num_images = 2
         self.weapon.animate_shot()
-        #self.assertEqual(self.weapon.images[0], self.weapon.images[-1])
+        # self.assertEqual(self.weapon.images[0], self.weapon.images[-1])
         self.assertEqual(self.weapon.frame_counter, 1)
         self.assertNotEqual(self.weapon.reloading, False)
         self.assertEqual(self.weapon.frame_counter, 1)
+
 
 class TestPlayer(unittest.TestCase):
     def setUp(self):
@@ -108,3 +108,133 @@ class TestPlayer(unittest.TestCase):
         initial_health = self.player.health
         self.player.take_damage(10)
         self.assertEqual(self.player.health, initial_health - 10)
+
+
+class TestMap(unittest.TestCase):
+
+    def setUp(self):
+        self.game = Game()
+        self.map = Map(self.game)
+
+    def test_get_map(self):
+        self.assertEqual(self.map.world_map, {
+            (0, 0): 1,
+            (0, 1): 1,
+            (0, 2): 1,
+            (0, 3): 1,
+            (0, 4): 1,
+            (0, 5): 1,
+            (0, 6): 1,
+            (0, 7): 1,
+            (0, 8): 1,
+            (0, 9): 1,
+            (0, 10): 1,
+            (0, 11): 1,
+            (0, 12): 1,
+            (0, 13): 1,
+            (0, 14): 1,
+            (1, 0): 1,
+            (1, 11): 1,
+            (1, 14): 1,
+            (2, 0): 1,
+            (2, 11): 1,
+            (2, 14): 1,
+            (3, 0): 1,
+            (3, 4): 1,
+            (3, 7): 1,
+            (3, 11): 1,
+            (3, 14): 2,
+            (4, 0): 1,
+            (4, 4): 1,
+            (4, 7): 1,
+            (4, 11): 1,
+            (4, 14): 1,
+            (5, 0): 1,
+            (5, 4): 1,
+            (5, 7): 1,
+            (5, 11): 2,
+            (5, 14): 1,
+            (6, 0): 2,
+            (6, 4): 1,
+            (6, 5): 2,
+            (6, 6): 1,
+            (6, 7): 1,
+            (6, 14): 1,
+            (7, 0): 1,
+            (7, 11): 2,
+            (7, 14): 1,
+            (8, 0): 1,
+            (8, 11): 1,
+            (8, 14): 1,
+            (9, 0): 1,
+            (9, 5): 1,
+            (9, 11): 1,
+            (9, 14): 1,
+            (10, 0): 1,
+            (10, 5): 2,
+            (10, 11): 1,
+            (10, 12): 1,
+            (10, 13): 1,
+            (10, 14): 1,
+            (11, 0): 1,
+            (11, 5): 1,
+            (11, 14): 1,
+            (12, 0): 1,
+            (12, 14): 1,
+            (13, 0): 1,
+            (13, 14): 1,
+            (14, 0): 1,
+            (14, 14): 1,
+            (15, 0): 1,
+            (15, 1): 1,
+            (15, 2): 1,
+            (15, 3): 1,
+            (15, 4): 1,
+            (15, 5): 1,
+            (15, 6): 1,
+            (15, 7): 1,
+            (15, 8): 1,
+            (15, 9): 1,
+            (15, 10): 1,
+            (15, 11): 1,
+            (15, 12): 1,
+            (15, 13): 1,
+            (15, 14): 1
+        })
+
+
+class TestAmmo(unittest.TestCase):
+
+    def setUp(self):
+        self.game = Game()
+        self.game.player.x = 2.5
+        self.game.player.y = 3.5
+        self.ammo = Ammo(self.game, scale=1, shift=0)
+
+    def test_pick_up_adds_ammo_to_weapon(self):
+        self.game.weapons.weapons[0].ammo = 0
+        self.game.object_manager.sprites.append(self.ammo)
+        self.ammo.pick_up()
+        self.assertEqual(self.game.weapons.weapons[0].ammo, 5)
+
+    def test_pick_up_removes_ammo_from_map(self):
+        self.ammo.pick_up()
+        self.assertNotIn(self.ammo, self.game.object_manager.sprites)
+
+
+class RayCastingTest(unittest.TestCase):
+
+    def setUp(self):
+        pygame.init()
+        self.game = Game()
+        self.ray_casting = RayCasting(self.game)
+
+    def test_ray_cast(self):
+        self.game.player.angle = 0
+        self.ray_casting.ray_cast()
+        self.assertEqual(len(self.ray_casting.ray_casting_result), NUM_RAYS)
+        self.assertEqual(len(self.ray_casting.ray_casting_result[0]), 4)
+        self.assertIsInstance(self.ray_casting.ray_casting_result[0][0], float)
+        self.assertIsInstance(self.ray_casting.ray_casting_result[0][1], float)
+        self.assertIsInstance(self.ray_casting.ray_casting_result[0][2], int)
+        self.assertIsInstance(self.ray_casting.ray_casting_result[0][3], float)
