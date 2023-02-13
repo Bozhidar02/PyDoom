@@ -12,6 +12,7 @@ class Player:
         self.shot = False
         self.health = PLAYER_MAX_HEALTH
         self.rel = 0
+        self.armour = PLAYER_MAX_ARMOUR
 
     def is_dead(self):
         if self.health <= 0:
@@ -21,7 +22,11 @@ class Player:
             self.game.new_game()
 
     def take_damage(self, damage):
-        self.health -= damage
+        if self.armour >= 0:
+            self.health -= int((damage*self.armour)/100)
+            self.armour -= damage
+        else:
+            self.health -= damage
         self.game.obj_render.player_damage()
         self.game.sound.player_pain.play()
         self.is_dead()

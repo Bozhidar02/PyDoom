@@ -19,6 +19,8 @@ class ObjectManager:
         # items
         self.add_medkit(MedKit(game))
         self.add_ammo(Ammo(game))
+        self.add_armour(Armour(game))
+        self.add_armour(Armour(game, pos=(1.5, 12.5)))
         # npcs
         self.add_npc(DemonSoldier(game))
         self.add_npc(DemonSoldier(game, pos=(11.5, 4.5)))
@@ -44,3 +46,6 @@ class ObjectManager:
 
     def add_ammo(self, ammo):
         self.sprites.append(ammo)
+
+    def add_armour(self, armour):
+        self.sprites.append(armour)

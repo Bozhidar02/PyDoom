@@ -89,6 +89,23 @@ class Ammo(SpriteObject):
         self.pick_up()
 
 
+class Armour(SpriteObject):
+    def __init__(self, game, path='resources/sprites/static/armour.png', pos=(1.5, 13.5), scale=0.3, shift=1.5):
+        super().__init__(game, path, pos, scale, shift)
+
+    def pick_up(self):
+        if int(self.x) == int(self.game.player.x) and int(self.y) == int(self.game.player.y):
+            if self.game.player.armour < PLAYER_MAX_ARMOUR:
+                self.game.player.armour += 20
+                diff = PLAYER_MAX_ARMOUR - self.game.player.armour
+                if diff < 0:
+                    self.game.player.armour += diff
+                self.game.object_manager.sprites.remove(self)
+
+    def update(self):
+        super().update()
+        self.pick_up()
+
 class AnimatedSprites(SpriteObject):
     def __init__(self, game, path='resources/sprites/animated/blue_fire/fb0.png', pos=(5, 3.5), scale=0.8,
                  shift=0.15, animation_time=200):
