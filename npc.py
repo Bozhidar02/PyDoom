@@ -69,7 +69,6 @@ class NPC(AnimatedSprites):
             self.alive = False
             self.game.sound.npc_death.play()
             self.game.object_manager.npc_num -= 1
-            # self.game.end_game()
 
     def attack(self):
         if self.animation_trigger:

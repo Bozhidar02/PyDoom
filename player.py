@@ -22,9 +22,12 @@ class Player:
             self.game.new_game()
 
     def take_damage(self, damage):
-        if self.armour >= 0:
+        if self.armour > 0:
             self.health -= int((damage*self.armour)/100)
-            self.armour -= damage
+            if self.armour > 0:
+                self.armour -= damage
+                if self.armour <= 0:
+                    self.armour = 0
         else:
             self.health -= damage
         self.game.obj_render.player_damage()
@@ -41,7 +44,8 @@ class Player:
                     self.game.sound.chainsaw.play()
                 self.shot = True
                 self.game.weapons.equipped_weapon.reloading = True
-                self.game.weapons.equipped_weapon.ammo -= 1
+                if self.game.weapons.equipped_weapon.ammo >= 0 :
+                    self.game.weapons.equipped_weapon.ammo -= 1
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and not self.shot and not self.game.weapons.equipped_weapon.reloading:
                 if self.game.weapons.current_index == 0:
