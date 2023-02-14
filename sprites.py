@@ -51,6 +51,42 @@ class SpriteObject:
         self.game.ray_cast.objects_to_render.append((self.norm_dist, image, pos))
 
 
+class AnimatedSprites(SpriteObject):
+    def __init__(self, game, path='resources/sprites/animated/blue_fire/fb0.png', pos=(5, 3.5), scale=0.8,
+                 shift=0.15, animation_time=200):
+        super().__init__(game, path, pos, scale, shift)
+        self.animation_time = animation_time
+        self.path = path.rsplit('/', 1)[0]
+        self.images = self.get_images(self.path)
+        self.animation_trigger = False
+        self.animation_time_count = pygame.time.get_ticks()
+
+    def update(self):
+        super().update()
+        self.check_animation_time()
+        self.animate(self.images)
+
+    def animate(self, images):
+        if self.animation_trigger:
+            images.rotate(-1)
+            self.image = images[0]
+
+    def check_animation_time(self):
+        self.animation_trigger = False
+        current_time = pygame.time.get_ticks()
+        if current_time - self.animation_time_count > self.animation_time:
+            self.animation_time_count = current_time
+            self.animation_trigger = True
+
+    def get_images(self, path):
+        images = deque()
+        for file_name in os.listdir(path):
+            if os.path.isfile(os.path.join(path, file_name)):
+                image = pygame.image.load(path + '/' + file_name).convert_alpha()
+                images.append(image)
+        return images
+
+
 class MedKit(SpriteObject):
     def __init__(self, game, path='resources/sprites/static/medkit.png', pos=(1.5, 2.5), scale=0.2, shift=2.5):
         super().__init__(game, path, pos, scale, shift)
@@ -105,38 +141,3 @@ class Armour(SpriteObject):
     def update(self):
         super().update()
         self.pick_up()
-
-class AnimatedSprites(SpriteObject):
-    def __init__(self, game, path='resources/sprites/animated/blue_fire/fb0.png', pos=(5, 3.5), scale=0.8,
-                 shift=0.15, animation_time=200):
-        super().__init__(game, path, pos, scale, shift)
-        self.animation_time = animation_time
-        self.path = path.rsplit('/', 1)[0]
-        self.images = self.get_images(self.path)
-        self.animation_trigger = False
-        self.animation_time_count = pygame.time.get_ticks()
-
-    def update(self):
-        super().update()
-        self.check_animation_time()
-        self.animate(self.images)
-
-    def animate(self, images):
-        if self.animation_trigger:
-            images.rotate(-1)
-            self.image = images[0]
-
-    def check_animation_time(self):
-        self.animation_trigger = False
-        current_time = pygame.time.get_ticks()
-        if current_time - self.animation_time_count > self.animation_time:
-            self.animation_time_count = current_time
-            self.animation_trigger = True
-
-    def get_images(self, path):
-        images = deque()
-        for file_name in os.listdir(path):
-            if os.path.isfile(os.path.join(path, file_name)):
-                image = pygame.image.load(path + '/' + file_name).convert_alpha()
-                images.append(image)
-        return images
