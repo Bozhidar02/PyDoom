@@ -35,26 +35,37 @@ class Player:
         self.is_dead()
 
     def fire(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1 and not self.shot and not self.game.weapons.equipped_weapon.reloading\
-                    and (self.game.weapons.equipped_weapon.ammo > 0 or self.game.weapons.equipped_weapon.ammo < 0):
-                if self.game.weapons.current_index == 0:
+        if self.game.weapons.current_index == 0:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1 and not self.shot and not self.game.weapons.equipped_weapon.reloading\
+                        and (self.game.weapons.equipped_weapon.ammo > 0 or self.game.weapons.equipped_weapon.ammo < 0):
                     self.game.sound.shotgun.play()
-                else:
-                    self.game.sound.chainsaw.play()
-                self.shot = True
-                self.game.weapons.equipped_weapon.reloading = True
-                if self.game.weapons.equipped_weapon.ammo >= 0 :
+                    self.shot = True
+                    self.game.weapons.equipped_weapon.reloading = True
+                    if self.game.weapons.equipped_weapon.ammo >= 0:
+                        self.game.weapons.equipped_weapon.ammo -= 1
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and not self.shot and not self.game.weapons.equipped_weapon.reloading:
+                    if self.game.weapons.current_index == 0:
+                        self.game.sound.shotgun.play()
+                    else:
+                        self.game.sound.chainsaw.play()
+                    self.shot = True
+                    self.game.weapons.equipped_weapon.reloading = True
                     self.game.weapons.equipped_weapon.ammo -= 1
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE and not self.shot and not self.game.weapons.equipped_weapon.reloading:
-                if self.game.weapons.current_index == 0:
-                    self.game.sound.shotgun.play()
-                else:
-                    self.game.sound.chainsaw.play()
+        elif self.game.weapons.current_index == 1:
+            while event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not self.shot and not \
+                    self.game.weapons.equipped_weapon.reloading and self.game.weapons.equipped_weapon.ammo < 0:
+                '''if event.button == 1 and not self.shot and not self.game.weapons.equipped_weapon.reloading \
+                        and self.game.weapons.equipped_weapon.ammo < 0: '''
                 self.shot = True
                 self.game.weapons.equipped_weapon.reloading = True
-                self.game.weapons.equipped_weapon.ammo -= 1
+            '''elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE and not self.shot and not self.game.weapons.equipped_weapon.reloading:
+                    self.game.sound.chainsaw.play()
+                    self.shot = True
+                    self.game.weapons.equipped_weapon.reloading = True
+                    self.game.weapons.equipped_weapon.ammo -= 1'''
 
     def movement(self):
         sina = math.sin(self.angle)

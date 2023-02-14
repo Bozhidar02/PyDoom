@@ -16,7 +16,6 @@ class Weapon(AnimatedSprites):
         self.range = w_range
 
     def animate_shot(self):
-        # self.game.sound.shotgun.play()
         if self.reloading:
             self.game.player.shot = False
             if self.animation_trigger:
@@ -44,6 +43,49 @@ class Shotgun(Weapon):
 
 class Chainsaw(Weapon):
     def __init__(self, game, path='resources/sprites/weapons/chainsaw/0.png', scale=4.5,
-                 animation_time=70, damage=50, w_range=2):
+                 animation_time=70, damage=10, w_range=2):
         super().__init__(game, path, scale, animation_time, damage, w_range)
+        self.mouse_pressed = False
         self.ammo = -1
+        self.shot_allowed_time = 0
+        self.shot_cooldown = 150
+
+    def animate_shot(self):
+        if self.reloading:
+            if pygame.mouse.get_pressed()[0]:
+                current_time = pygame.time.get_ticks()
+                if current_time > self.shot_allowed_time:
+                    self.frame_counter = 0
+                    self.game.player.shot = True
+                    self.images.rotate(-1)
+                    if self.animation_trigger:
+                        if self.frame_counter < 1:
+                            self.frame_counter += 1
+                        else:
+                            self.images.rotate(0)
+                            self.animation_trigger = False
+                        self.image = self.images[0]
+                    self.shot_allowed_time = current_time + self.shot_cooldown
+                else:
+                    self.game.player.shot = False
+            else:
+                self.game.player.shot = False
+        else:
+            self.game.player.shot = False
+
+    '''def animate_shot(self):
+        if self.reloading:
+            if pygame.mouse.get_pressed()[0]:
+                self.frame_counter = 0
+                self.game.player.shot = True
+                # self.images.rotate(-2)
+                if self.animation_trigger:
+                    if self.frame_counter < self.num_images - 1:
+                        self.frame_counter += 1
+                    else:
+                        self.images.rotate(0)
+            else:
+                self.image = self.images[0]
+            #else:
+               # self.reloading = False
+               # self.game.player.shot = False'''
