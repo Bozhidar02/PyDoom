@@ -43,7 +43,7 @@ class Shotgun(Weapon):
 
 class Chainsaw(Weapon):
     def __init__(self, game, path='resources/sprites/weapons/chainsaw/0.png', scale=4.5,
-                 animation_time=70, damage=10, w_range=2):
+                 animation_time=70, damage=20, w_range=2):
         super().__init__(game, path, scale, animation_time, damage, w_range)
         self.mouse_pressed = False
         self.ammo = -1
@@ -60,15 +60,14 @@ class Chainsaw(Weapon):
                 current_time = pygame.time.get_ticks()
                 if current_time > self.shot_allowed_time:
                     self.game.player.shot = True
-                    #self.images.rotate(-1)
-                    if self.animation_trigger:
-                        if self.pain_counter <= self.num_images - 2:
-                            self.pain_counter += 1
-                        self.image = self.images[3]
-                        print(self.pain_counter)
                     self.shot_allowed_time = current_time + self.shot_cooldown
                 else:
                     self.game.player.shot = False
+                #self.images.rotate(-1)
+                if self.animation_trigger:
+                    if self.pain_counter <= self.num_images - 2:
+                        self.pain_counter += 1
+                    self.image = self.images[3]
             else:
                 self.game.player.shot = False
                 self.pain_counter = 0

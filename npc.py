@@ -179,5 +179,5 @@ class CacoDemon(NPC):
         self.attack_dist = 1.5
         self.health = 150
         self.damage = 20
-        self.speed = 0.05
+        self.speed = 0.07
         self.accuracy = 1

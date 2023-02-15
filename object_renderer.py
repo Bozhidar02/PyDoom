@@ -7,6 +7,8 @@ armour_off = 20
 
 class ObjectRenderer:
     def __init__(self, game):
+        self.damage_time = None
+        self.damage_duration = 5
         self.game = game
         self.screen = game.screen
         self.wall_textures = self.load_wall_textures()
@@ -15,11 +17,14 @@ class ObjectRenderer:
         self.damage_screen = self.get_texture('resources/textures/damage_screen.png', Res)
         self.game_over_screen = self.get_texture('resources/textures/game_over_screen.png', Res)
         self.victory_screen = self.get_texture('resources/textures/victory.png', Res)
+        self.pain_face = self.get_texture('resources/textures/pain.png', (80, 80))
         self.digit_size = 90
         self.digit_images = [self.get_texture(f'resources/textures/nums/{i}.png', [self.digit_size] * 2)
                              for i in range(11)]
         self.green_digit_images = [self.get_texture(f'resources/textures/GreenNums/g{i}.png', [self.digit_size] * 2)
                                    for i in range(10)]
+        self.faces = [self.get_texture(f'resources/textures/Faces/{i}.png', [self.digit_size] * 2)
+                      for i in range(3)]
         self.digits = dict(zip(map(str, range(11)), self.digit_images))
         self.ammo_digits = dict(zip(map(str, range(10)), self.digit_images))
         self.green_digits = dict(zip(map(str, range(10)), self.green_digit_images))
@@ -30,6 +35,7 @@ class ObjectRenderer:
         self.draw_player_health()
         self.draw_player_armour()
         self.draw_player_ammo()
+        self.draw_player_face()
 
     def draw_player_health(self):
         health = str(self.game.player.health)
@@ -42,8 +48,6 @@ class ObjectRenderer:
         for i, char in enumerate(armour):
             self.screen.blit(self.green_digits[char], (i * self.digit_size + armour_off, 100))
 
-    # fix number going down
-
     def draw_player_ammo(self):
         ammo = str(self.game.weapons.weapons[self.game.weapons.current_index].ammo)
         for i, char in enumerate(ammo):
@@ -51,6 +55,17 @@ class ObjectRenderer:
                 char = '0'
 
             self.screen.blit(self.ammo_digits[char], (i * self.digit_size + health_off, HEIGHT - 100))
+
+    def draw_player_face(self):
+        health = self.game.player.health
+        width = WIDTH - 120
+        height = HEIGHT - 110
+        if 100 >= health >= 60:
+            self.screen.blit(self.faces[0], (width, height))
+        elif 59 >= health >= 20:
+            self.screen.blit(self.faces[1], (width, height))
+        else:
+            self.screen.blit(self.faces[2], (width, height))
 
     def game_over(self):
         self.screen.blit(self.game_over_screen, (0, 0))
@@ -66,7 +81,13 @@ class ObjectRenderer:
         pygame.draw.rect(self.screen, FLOOR_COLOUR, (0, HALF_HEIGHT, WIDTH, HEIGHT))
 
     def player_damage(self):
-        self.screen.blit(self.damage_screen, (0, 0))
+        self.damage_time = pygame.time.get_ticks()
+        width = WIDTH - 120
+        height = HEIGHT - 110
+        while pygame.time.get_ticks() - self.damage_time < self.damage_duration:
+            self.screen.blit(self.damage_screen, (0, 0))
+            self.screen.blit(self.pain_face, (width, height))
+            pygame.display.flip()
 
     def render_game_objects(self):
         obj_list = sorted(self.game.ray_cast.objects_to_render, key=lambda y: y[0], reverse=True)
