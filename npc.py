@@ -181,3 +181,75 @@ class CacoDemon(NPC):
         self.damage = 20
         self.speed = 0.07
         self.accuracy = 1
+
+
+class PainElemental(NPC):
+    def __init__(self, game, path='resources/sprites/npcs/PainElemental/0.png', pos=(14.5, 4), scale=0.7, shift=0.27,
+                 animation_time=250):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+        self.last_attack_time = 0
+        self.current_time = None
+        self.attack_dist = 7
+        self.health = 150
+        self.damage = 20
+        self.speed = 0.05
+        self.accuracy = 1
+        self.attack_cooldown = 5000
+
+    def animate_death(self):
+        if not self.alive:
+            if self.animation_trigger and self.frame_count < len(self.death_images) - 1:
+                self.death_images.rotate(-1)
+                self.image = self.death_images[0]
+                self.frame_count += 1
+
+    def spawn_position_getter(self, x, y):
+        spawn_x, spawn_y = self.map_position
+        if self.wall_coords(int(spawn_x + x * self.size), int(spawn_y)):
+            spawn_x += x
+        if self.wall_coords(int(spawn_x), int(spawn_y + y * self.size)):
+            spawn_y += y
+        return spawn_x, spawn_y
+
+    def spawn_conflict_denier(self, spawn_position):
+        return spawn_position in self.game.object_manager.npc_positions
+
+    def spawn_lost_soul(self, spawn_pos):
+        lost_soul = LostSoul(self.game, pos=spawn_pos)
+        self.game.object_manager.add_lost_soul(lost_soul)
+        print("another one")
+
+    def attack(self):
+        current_time = pygame.time.get_ticks()
+        if self.animation_trigger and current_time - self.last_attack_time > self.attack_cooldown:
+            self.last_attack_time = current_time
+            self.game.sound.npc_attack.play()
+            spawn_positions = self.spawn_position_getter(1, 1), self.spawn_position_getter(-1, -1), \
+                              self.spawn_position_getter(1, -1), self.spawn_position_getter(-1, 1), \
+                              self.spawn_position_getter(1, 0), self.spawn_position_getter(0, 1), \
+                              self.spawn_position_getter(-1, 0), self.spawn_position_getter(0, -1)
+            for spawn_position in spawn_positions:
+                if self.map_position is not spawn_position and self.spawn_conflict_denier(spawn_position):
+                    self.spawn_lost_soul(spawn_position)
+                    break
+
+
+class LostSoul(NPC):
+    def __init__(self, game, path='resources/sprites/npcs/LostSoul/0.png', pos=(0, 0), scale=0.3, shift=0.27,
+                 animation_time=200):
+        super().__init__(game, path, pos, scale, shift, animation_time)
+        self.attack_images = self.get_images(self.path + '/Death')
+        self.attack_dist = 0.3
+        self.health = 10
+        self.damage = 10
+        self.speed = 0.8
+        self.accuracy = 1
+        self.allowed_time = 10
+
+    def attack(self):
+        if self.animation_trigger:
+            self.game.sound.npc_attack.play()
+            if random() < self.accuracy:
+                self.game.player.take_damage(self.damage)
+            self.alive = False
+            self.health = 0

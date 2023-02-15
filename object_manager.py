@@ -26,6 +26,8 @@ class ObjectManager:
         self.add_npc(DemonSoldier(game, pos=(11.5, 4.5)))
         self.add_npc(CacoDemon(game))
         self.add_npc(CacoDemon(game, pos=(14.5, 10)))
+        self.add_npc(PainElemental(game))
+        #self.add_lost_soul(LostSoul(game, pos=(3.5, 8)))
         self.npc_num = len(self.npcs)
 
     def update(self):
@@ -37,6 +39,9 @@ class ObjectManager:
 
     def add_npc(self, npc):
         self.npcs.append(npc)
+
+    def add_lost_soul(self, lost_soul):
+        self.npcs.append(lost_soul)
 
     def add_sprite(self, sprite):
         self.sprites.append(sprite)
