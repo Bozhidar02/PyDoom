@@ -194,7 +194,7 @@ class PainElemental(NPC):
         self.damage = 20
         self.speed = 0.05
         self.accuracy = 1
-        self.attack_cooldown = 5000
+        self.attack_cooldown = 5555
 
     def animate_death(self):
         if not self.alive:
@@ -219,6 +219,22 @@ class PainElemental(NPC):
         self.game.object_manager.add_lost_soul(lost_soul)
 
     def attack(self):
+        if self.animation_trigger:
+            self.game.sound.npc_attack.play()
+            # Define the maximum distance from the player to spawn a lost soul
+            max_distance = 1
+            # Get the player's map position
+            px, py = self.map_position
+            # Generate a random position within max_distance of the player
+            dx, dy = randint(-max_distance, max_distance), randint(-max_distance, max_distance)
+            sx, sy = px + dx, py + dy
+            # Check that the spawn position is within the world map and not inside a wall
+            if (sx, sy) not in self.game.map.world_map and self.wall_coords(sx, sy):
+                self.spawn_lost_soul((sx, sy))
+                if random() < self.accuracy:
+                    self.game.player.take_damage(self.damage)
+    ''' 
+   def attack(self):
         current_time = pygame.time.get_ticks()
         if self.animation_trigger and current_time - self.last_attack_time > self.attack_cooldown:
             self.last_attack_time = current_time
@@ -231,14 +247,14 @@ class PainElemental(NPC):
                 if self.map_position is not spawn_position and not self.spawn_conflict_denier(spawn_position):
                     print(spawn_position)
                     self.spawn_lost_soul(spawn_position)
-                    break
+                    break'''
 
 
 class LostSoul(NPC):
     def __init__(self, game, path='resources/sprites/npcs/LostSoul/0.png', pos=(6.5, 10), scale=0.7, shift=0.27,
                  animation_time=200):
         super().__init__(game, path, pos, scale, shift, animation_time)
-        self.attack_dist = 1.5
+        self.attack_dist = 1
         self.health = 10
         self.damage = 10
         self.speed = 0.075
