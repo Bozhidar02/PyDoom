@@ -27,7 +27,7 @@ class ObjectManager:
         self.add_npc(CacoDemon(game))
         self.add_npc(CacoDemon(game, pos=(14.5, 10)))
         self.add_npc(PainElemental(game))
-        #self.add_lost_soul(LostSoul(game, pos=(3.5, 8)))
+        self.add_lost_soul(LostSoul(game, pos=(1, 1)))
         self.npc_num = len(self.npcs)
 
     def update(self):
