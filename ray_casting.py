@@ -57,7 +57,10 @@ class RayCasting:
                 y_hor += dy
                 depth_hor += delta_depth
             # vertical
-            x_vert, dx = (x_map + 1, 1) if cosa > 0 else (x_map - 1e-6, -1)
+            if cosa > 0:
+                x_vert, dx = (x_map + 1, 1)
+            else:
+                x_vert, dx = (x_map - 1e-6, -1)
             depth_vert = (x_vert - ox) / cosa
             y_vert = oy + depth_vert * sina
             delta_depth = dx / cosa
