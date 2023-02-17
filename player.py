@@ -23,7 +23,7 @@ class Player:
 
     def take_damage(self, damage):
         if self.armour > 0:
-            self.health -= int((damage*self.armour)/100)
+            self.health -= int((damage * self.armour) / 100)
             if self.armour > 0:
                 self.armour -= damage
                 if self.armour <= 0:
@@ -38,7 +38,7 @@ class Player:
     def fire(self, event):
         if self.game.weapons.current_index == 0:
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1 and not self.shot and not self.game.weapons.equipped_weapon.reloading\
+                if event.button == 1 and not self.shot and not self.game.weapons.equipped_weapon.reloading \
                         and (self.game.weapons.equipped_weapon.ammo > 0 or self.game.weapons.equipped_weapon.ammo < 0):
                     self.game.sound.shotgun.play()
                     self.shot = True
@@ -57,16 +57,8 @@ class Player:
         elif self.game.weapons.current_index == 1:
             while event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and not self.shot and not \
                     self.game.weapons.equipped_weapon.reloading and self.game.weapons.equipped_weapon.ammo < 0:
-                '''if event.button == 1 and not self.shot and not self.game.weapons.equipped_weapon.reloading \
-                        and self.game.weapons.equipped_weapon.ammo < 0: '''
                 self.shot = True
                 self.game.weapons.equipped_weapon.reloading = True
-            '''elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and not self.shot and not self.game.weapons.equipped_weapon.reloading:
-                    self.game.sound.chainsaw.play()
-                    self.shot = True
-                    self.game.weapons.equipped_weapon.reloading = True
-                    self.game.weapons.equipped_weapon.ammo -= 1'''
 
     def movement(self):
         sina = math.sin(self.angle)
@@ -94,7 +86,6 @@ class Player:
         if keys[pygame.K_RIGHT]:
             self.angle += PLAYER_ROTATION_SPEED * self.game.delta
         self.angle %= math.tau
-        print(self.x, self.y)
 
     def wall_coords(self, x, y):
         return (x, y) not in self.game.map.world_map

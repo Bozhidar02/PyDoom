@@ -202,6 +202,8 @@ class PainElemental(NPC):
                 self.death_images.rotate(-1)
                 self.image = self.death_images[0]
                 self.frame_count += 1
+            elif self.frame_count >= len(self.death_images) - 1:
+                self.game.object_manager.npcs.remove(self)
 
     def spawn_position_getter(self, x, y):
         spawn_x, spawn_y = self.map_position
@@ -234,7 +236,7 @@ class PainElemental(NPC):
 
 
 class LostSoul(NPC):
-    def __init__(self, game, path='resources/sprites/npcs/LostSoul/0.png', pos=(6.5, 10), scale=0.7, shift=0.27,
+    def __init__(self, game, path='resources/sprites/npcs/LostSoul/0.png', pos=(6.5, 10), scale=0.6, shift=0.27,
                  animation_time=200):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.attack_dist = 1
@@ -244,11 +246,18 @@ class LostSoul(NPC):
         self.accuracy = 1
         self.attack_images = self.get_images(self.path + '/Death')
 
+    def animate_death(self):
+        if not self.alive:
+            if self.animation_trigger and self.frame_count < len(self.death_images) - 1:
+                self.death_images.rotate(-1)
+                self.image = self.death_images[0]
+                self.frame_count += 1
+            elif self.frame_count >= len(self.death_images) - 1:
+                self.game.object_manager.npcs.remove(self)
+
     def attack(self):
         if self.animation_trigger:
             self.game.sound.npc_attack.play()
-            # if random() < self.accuracy:
             self.game.player.take_damage(self.damage)
             self.alive = False
             self.health = 0
-

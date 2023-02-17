@@ -30,6 +30,7 @@ class ObjectManager:
         self.add_ammo(Ammo(game, pos=(1.5, 8.5)))
         self.add_ammo(Ammo(game, pos=(4.5, 20.5)))
         self.add_ammo(Ammo(game, pos=(4.5, 19.5)))
+        self.add_ammo(Ammo(game, pos=(15.5, 20.5)))
         self.add_armour(Armour(game))
         self.add_armour(Armour(game, pos=(1.5, 12.5)))
         self.add_armour(Armour(game, pos=(11.5, 19.5)))
@@ -60,6 +61,14 @@ class ObjectManager:
             sprite.update()
         for npc in self.npcs:
             npc.update()
+        self.victory_check()
+
+    def victory_check(self):
+        if not len(self.npc_positions):
+            self.game.obj_render.victory()
+            pygame.display.flip()
+            pygame.time.delay(4500)
+            self.game.new_game()
 
     def add_npc(self, npc):
         self.npcs.append(npc)

@@ -1,3 +1,5 @@
+import time
+
 import pygame
 from settings import *
 

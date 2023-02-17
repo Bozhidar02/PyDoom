@@ -46,7 +46,6 @@ class Game:
         self.weapons = WeaponWheel(self)
         self.sound = Sound(self)
         self.pathfinder = Pathfinder(self)
-
         self.sound.theme.play()
         
     def update_screen(self):
