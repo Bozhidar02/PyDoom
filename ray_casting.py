@@ -87,14 +87,10 @@ class RayCasting:
             # remove fishbow
             depth *= math.cos(self.game.player.angle - ray_angle)
             # projection
-            colour = [225 / (1 + depth ** 5 * 0.00002)] * 3
             projection_height = SCREEN_DIST / (depth + 0.0001)
 
             #ray casting results
             self.ray_casting_result.append((depth, projection_height, texture, offset))
-            # test stuff
-            # pygame.draw.line(self.game.screen, 'yellow', (100 * ox, 100 * oy),
-            #                 (100 * ox + 100 * depth * cosa, 100 * oy + 100 * depth * sina), 2)
             ray_angle += DELTA_ANGLE
 
     def update(self):
