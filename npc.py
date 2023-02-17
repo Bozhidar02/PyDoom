@@ -189,12 +189,12 @@ class PainElemental(NPC):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.last_attack_time = 0
         self.current_time = None
-        self.attack_dist = 7
-        self.health = 150
-        self.damage = 20
+        self.attack_dist = 6
+        self.health = 250
+        self.damage = 0
         self.speed = 0.05
         self.accuracy = 1
-        self.attack_cooldown = 5555
+        self.attack_cooldown = 100000
 
     def animate_death(self):
         if not self.alive:
@@ -217,37 +217,20 @@ class PainElemental(NPC):
     def spawn_lost_soul(self, spawn_pos):
         lost_soul = LostSoul(self.game, pos=spawn_pos)
         self.game.object_manager.add_lost_soul(lost_soul)
+        self.game.object_manager.npc_num += 1
 
     def attack(self):
         if self.animation_trigger:
             self.game.sound.npc_attack.play()
-            # Define the maximum distance from the player to spawn a lost soul
             max_distance = 1
-            # Get the player's map position
             px, py = self.map_position
-            # Generate a random position within max_distance of the player
             dx, dy = randint(-max_distance, max_distance), randint(-max_distance, max_distance)
             sx, sy = px + dx, py + dy
-            # Check that the spawn position is within the world map and not inside a wall
-            if (sx, sy) not in self.game.map.world_map and self.wall_coords(sx, sy):
+            if (sx, sy) not in self.game.map.world_map and self.wall_coords(sx, sy) \
+                    and (sx, sy) is not self.game.player.map_position:
                 self.spawn_lost_soul((sx, sy))
                 if random() < self.accuracy:
                     self.game.player.take_damage(self.damage)
-    ''' 
-   def attack(self):
-        current_time = pygame.time.get_ticks()
-        if self.animation_trigger and current_time - self.last_attack_time > self.attack_cooldown:
-            self.last_attack_time = current_time
-            self.game.sound.npc_attack.play()
-            spawn_positions = self.spawn_position_getter(1, 1), self.spawn_position_getter(-1, -1), \
-                              self.spawn_position_getter(1, -1), self.spawn_position_getter(-1, 1), \
-                              self.spawn_position_getter(1, 0), self.spawn_position_getter(0, 1), \
-                              self.spawn_position_getter(-1, 0), self.spawn_position_getter(0, -1)
-            for spawn_position in spawn_positions:
-                if self.map_position is not spawn_position and not self.spawn_conflict_denier(spawn_position):
-                    print(spawn_position)
-                    self.spawn_lost_soul(spawn_position)
-                    break'''
 
 
 class LostSoul(NPC):
@@ -256,8 +239,8 @@ class LostSoul(NPC):
         super().__init__(game, path, pos, scale, shift, animation_time)
         self.attack_dist = 1
         self.health = 10
-        self.damage = 10
-        self.speed = 0.075
+        self.damage = 5
+        self.speed = 0.07
         self.accuracy = 1
         self.attack_images = self.get_images(self.path + '/Death')
 

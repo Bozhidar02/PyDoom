@@ -30,7 +30,8 @@ class Player:
                     self.armour = 0
         else:
             self.health -= damage
-        self.game.obj_render.player_damage()
+        if damage > 0:
+            self.game.obj_render.player_damage()
         self.game.sound.player_pain.play()
         self.is_dead()
 
@@ -93,6 +94,7 @@ class Player:
         if keys[pygame.K_RIGHT]:
             self.angle += PLAYER_ROTATION_SPEED * self.game.delta
         self.angle %= math.tau
+        print(self.x, self.y)
 
     def wall_coords(self, x, y):
         return (x, y) not in self.game.map.world_map
