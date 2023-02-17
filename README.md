@@ -3,4 +3,4 @@ This is a retro-shooter style game inspired by Doom and uses the raycasting meth
 The controlls are:
 w,a,s,d to move
 left mouse button to shoot
-v to change weapons
+v to change weapons. Credit to Harsh29 for the sprites(https://spritedatabase.net/game/760).
